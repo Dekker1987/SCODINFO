@@ -42,14 +42,14 @@ public class ContentUtil {
         }
     }
 
-    private String getContentToParse(){
+    private String getContentToParse(String fileNameToParse){
         if(ctx!=null){
             BufferedReader bufferedReader = null;
             StringBuilder fileContent = null;
 
             try {
                 bufferedReader =
-                        new BufferedReader(new InputStreamReader(ctx.getAssets().open("cmd_v4_scode_list.txt")));
+                        new BufferedReader(new InputStreamReader(ctx.getAssets().open(fileNameToParse)));
 
                 fileContent = new StringBuilder();
 
@@ -75,7 +75,7 @@ public class ContentUtil {
         return "";
     }
 
-    public List<ScodeModel> getScodeList(){
+    public List<ScodeModel> getScodeList(String fileNameToParse){
 
         List<ScodeModel> scodeModels = new ArrayList<>();
 
@@ -87,7 +87,7 @@ public class ContentUtil {
             dBuilder = dbFactory.newDocumentBuilder();
             doc = dBuilder.parse(
                     new InputSource(
-                            new ByteArrayInputStream(getContentToParse().getBytes("utf-8"))));
+                            new ByteArrayInputStream(getContentToParse(fileNameToParse).getBytes("utf-8"))));
 
             Element element=doc.getDocumentElement();
             element.normalize();

@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -27,7 +26,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private final String LOG_TAG = getClass().getName();
     private int backPressCounter;
     private ActionBar actionBar;
     private RecyclerView rc_scode_lst;
@@ -35,8 +33,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioButton rb_azm_ng;
     private EditText ed_scode_filter;
     private ContentUtil contentUtil;
-    private List<ScodeModel> scodeParentList;
-    private List<ParentObject> scodeParentListFiltered;
+    private List<ScodeModel> scodeParentListCmdV4;
+    private List<ParentObject> scodeParentListFilteredCmdV4;
+    private List<ScodeModel> scodeParentListAzmNg;
+    private List<ParentObject> scodeParentListFilteredAzmNg;
+    private boolean isCmdV4Enabled;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,44 +53,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initContent(){
         contentUtil = new ContentUtil(getApplicationContext());
+        scodeParentListCmdV4 = contentUtil.getScodeList("cmd_v4_scode_list.txt");
+        scodeParentListAzmNg = contentUtil.getScodeList("azm_ng_scode_list.txt");
     }
 
     private void initUI(){
         initNhideToolbar();
-        initScodeListRecView();
 
         rb_cmd_v4 = findViewById(R.id.rb_cmd_v4);
+        rb_cmd_v4.setOnClickListener(this);
+
+
         rb_azm_ng = findViewById(R.id.rd_azm_ng);
-        ed_scode_filter = findViewById(R.id.ed_scode_filter);
-        ed_scode_filter.addTextChangedListener(edFilter);
-    }
-
-    private void initScodeListRecView(){
-        scodeParentList = contentUtil.getScodeList();
-        scodeParentListFiltered = new ArrayList<>();
-
-        List<ParentObject> parentObject = new ArrayList<>();
-
-        for(final ScodeModel scodeModel:scodeParentList){
-            List<Object> childList = new ArrayList();
-            childList.add(new ScodeModelChild(){{
-                   setFullDescription(scodeModel.getScodeFullDescription());
-             }});
-
-            scodeModel.setChildObjectList(childList);
-            parentObject.add(scodeModel);
-        }
+        rb_azm_ng.setOnClickListener(this);
 
         rc_scode_lst = findViewById(R.id.rc_scode_lst);
-        rc_scode_lst.setAdapter(new ScodListAdapter(MainActivity.this,parentObject){{
-                                    setParentClickableViewAnimationDefaultDuration();
-                                    setParentAndIconExpandOnClick(true);
-        }});
         rc_scode_lst.setLayoutManager(new LinearLayoutManager(this));
         rc_scode_lst.setHasFixedSize(true);
+
+        ed_scode_filter = findViewById(R.id.ed_scode_filter);
+        ed_scode_filter.addTextChangedListener(edFilter);
+
+        initScodeListRecView(getCmdV4List());
     }
 
-    TextWatcher edFilter = new TextWatcher(){
+    private void initScodeListRecView(List<ParentObject> scodeList){
+        rc_scode_lst.setAdapter(null);
+        rc_scode_lst.setAdapter(new ScodListAdapter(MainActivity.this,scodeList){{
+            setParentClickableViewAnimationDefaultDuration();
+            setParentAndIconExpandOnClick(true);
+        }});
+    }
+
+    private List<ParentObject> getCmdV4List(){
+        scodeParentListFilteredCmdV4 = new ArrayList<>();
+        List<ParentObject> parentObjectCmdV4 = new ArrayList<>();
+
+        for(final ScodeModel scodeModel:scodeParentListCmdV4){
+            List<Object> childList = new ArrayList();
+            childList.add(new ScodeModelChild(){{
+                setFullDescription(scodeModel.getScodeFullDescription());
+            }});
+
+            scodeModel.setChildObjectList(childList);
+            parentObjectCmdV4.add(scodeModel);
+        }
+        return parentObjectCmdV4;
+    }
+
+    private List<ParentObject> getAzmNgList(){
+        scodeParentListFilteredAzmNg = new ArrayList<>();
+        List<ParentObject> parentObjectAzmNg = new ArrayList<>();
+
+        for(final ScodeModel scodeModel:scodeParentListAzmNg){
+            List<Object> childList = new ArrayList();
+            childList.add(new ScodeModelChild(){{
+                setFullDescription(scodeModel.getScodeFullDescription());
+            }});
+
+            scodeModel.setChildObjectList(childList);
+            parentObjectAzmNg.add(scodeModel);
+        }
+        return parentObjectAzmNg;
+    }
+
+    private final TextWatcher edFilter = new TextWatcher(){
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -102,23 +131,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void afterTextChanged(Editable s) {
-            scodeParentListFiltered.clear();
-            for(ScodeModel scodeModel: scodeParentList){
-                if(scodeModel.getScodeNo().toLowerCase().startsWith(ed_scode_filter.getText().toString())){
-                    scodeParentListFiltered.add(scodeModel);
-                }
-            }
-
-            rc_scode_lst.setAdapter(null);
-            rc_scode_lst.setAdapter(new ScodListAdapter(MainActivity.this,scodeParentListFiltered){{
-                setParentClickableViewAnimationDefaultDuration();
-                setParentAndIconExpandOnClick(true);
-            }});
-            rc_scode_lst.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-            rc_scode_lst.setHasFixedSize(true);
+            makeFilter();
         }
     };
 
+    private void makeFilter(){
+        if(isCmdV4Enabled){
+            filterCmdV4List();
+        } else {
+            filterAzmNgList();
+        }
+    }
+
+    private void filterCmdV4List(){
+        scodeParentListFilteredCmdV4.clear();
+        for(ScodeModel scodeModel: scodeParentListCmdV4){
+            if(scodeModel.getScodeNo().toLowerCase().startsWith(ed_scode_filter.getText().toString())){
+                scodeParentListFilteredCmdV4.add(scodeModel);
+            }
+        }
+        rc_scode_lst.setAdapter(null);
+        rc_scode_lst.setAdapter(new ScodListAdapter(MainActivity.this,scodeParentListFilteredCmdV4){{
+            setParentClickableViewAnimationDefaultDuration();
+            setParentAndIconExpandOnClick(true);
+        }});
+    }
+
+    private void filterAzmNgList(){
+        scodeParentListFilteredAzmNg.clear();
+        for(ScodeModel scodeModel: scodeParentListAzmNg){
+            if(scodeModel.getScodeNo().toLowerCase().startsWith(ed_scode_filter.getText().toString())){
+                scodeParentListFilteredAzmNg.add(scodeModel);
+            }
+        }
+        rc_scode_lst.setAdapter(null);
+        rc_scode_lst.setAdapter(new ScodListAdapter(MainActivity.this,scodeParentListFilteredAzmNg){{
+            setParentClickableViewAnimationDefaultDuration();
+            setParentAndIconExpandOnClick(true);
+        }});
+    }
 
     private void initNhideToolbar(){
         actionBar = getSupportActionBar();
@@ -153,16 +204,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.rb_cmd_v4:
-                Log.v(LOG_TAG,"cmd_v4");
+                cmdV4RdBtnSelected();
+                clearEdScodeFilter();
                 break;
-
             case R.id.rd_azm_ng:
-                Log.v(LOG_TAG,"cmd_v4");
+                azmNgRdBtnSelected();
+                clearEdScodeFilter();
                 break;
             default:
-                Log.v(LOG_TAG,"err...");
                 break;
         }
+    }
+
+    private void cmdV4RdBtnSelected(){
+        isCmdV4Enabled=true;
+        initScodeListRecView(getCmdV4List());
+    }
+
+    private void azmNgRdBtnSelected(){
+        isCmdV4Enabled=false;
+        initScodeListRecView(getAzmNgList());
+    }
+
+    private void clearEdScodeFilter(){
+        ed_scode_filter.setText("");
     }
 
     @Override

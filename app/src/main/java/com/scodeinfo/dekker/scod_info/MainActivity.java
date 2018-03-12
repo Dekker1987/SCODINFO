@@ -23,7 +23,6 @@ import com.scodeinfo.dekker.scod_info.utils.ContentUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private int backPressCounter;
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<ParentObject> scodeParentListFilteredAzmNg;
     private boolean isCmdV4Enabled;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +46,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initContent();
         initUI();
-
     }
 
     private void initContent(){
         contentUtil = new ContentUtil(getApplicationContext());
+        initCmdV4Content();
+        initAzmNgContent();
+    }
+
+    private void initCmdV4Content(){
         scodeParentListCmdV4 = contentUtil.getScodeList("cmd_v4_scode_list.txt");
+    }
+
+    private void initAzmNgContent(){
         scodeParentListAzmNg = contentUtil.getScodeList("azm_ng_scode_list.txt");
     }
 
@@ -144,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void filterCmdV4List(){
-        scodeParentListFilteredCmdV4.clear();
+        scodeParentListFilteredCmdV4=new ArrayList<>();
         for(ScodeModel scodeModel: scodeParentListCmdV4){
             if(scodeModel.getScodeNo().toLowerCase().startsWith(ed_scode_filter.getText().toString())){
                 scodeParentListFilteredCmdV4.add(scodeModel);
@@ -158,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void filterAzmNgList(){
-        scodeParentListFilteredAzmNg.clear();
+        scodeParentListFilteredAzmNg = new ArrayList<>();
         for(ScodeModel scodeModel: scodeParentListAzmNg){
             if(scodeModel.getScodeNo().toLowerCase().startsWith(ed_scode_filter.getText().toString())){
                 scodeParentListFilteredAzmNg.add(scodeModel);

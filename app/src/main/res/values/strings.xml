@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SCOD-INFO</string>
+    <string name="err_header">Error</string>
 </resources>

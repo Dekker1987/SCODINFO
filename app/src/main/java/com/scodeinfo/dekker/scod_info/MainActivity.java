@@ -9,13 +9,19 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.scodeinfo.dekker.scod_info.adapters.ScodListAdapter;
+import com.scodeinfo.dekker.scod_info.fragments.AdMobDialogFrag;
 import com.scodeinfo.dekker.scod_info.model.ScodeModel;
 import com.scodeinfo.dekker.scod_info.model.ScodeModelChild;
 import com.scodeinfo.dekker.scod_info.utils.ContentUtil;
@@ -31,11 +37,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioButton rb_cmd_v4;
     private RadioButton rb_azm_ng;
     private EditText ed_scode_filter;
+    private ImageView iv_info;
     private ContentUtil contentUtil;
     private List<ScodeModel> scodeParentListCmdV4;
     private List<ParentObject> scodeParentListFilteredCmdV4;
     private List<ScodeModel> scodeParentListAzmNg;
     private List<ParentObject> scodeParentListFilteredAzmNg;
+    private AdView mAdview;
+    private InterstitialAd interstitialAd;
     private boolean isCmdV4Enabled;
 
     @Override
@@ -46,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initContent();
         initUI();
+
+        initAdMob();
     }
 
     private void initContent(){
@@ -65,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initUI(){
         initNhideToolbar();
 
+        iv_info = findViewById(R.id.iv_info);
+        iv_info.setClickable(true);
+        iv_info.setOnClickListener(this);
+
         rb_cmd_v4 = findViewById(R.id.rb_cmd_v4);
         rb_cmd_v4.setOnClickListener(this);
 
@@ -83,10 +98,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initScodeListRecView(List<ParentObject> scodeList){
-        rc_scode_lst.setAdapter(null);
-        rc_scode_lst.setAdapter(new ScodListAdapter(MainActivity.this,scodeList){{
-            setParentClickableViewAnimationDefaultDuration();
-            setParentAndIconExpandOnClick(true);
+         rc_scode_lst.setAdapter(null); // need for removing previous adapter
+         rc_scode_lst.setAdapter(new ScodListAdapter(MainActivity.this,scodeList){{
+         setParentClickableViewAnimationDefaultDuration();
+         setParentAndIconExpandOnClick(true);
         }});
     }
 
@@ -173,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rc_scode_lst.setAdapter(new ScodListAdapter(MainActivity.this,scodeParentListFilteredAzmNg){{
             setParentClickableViewAnimationDefaultDuration();
             setParentAndIconExpandOnClick(true);
+
         }});
     }
 
@@ -181,6 +197,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(actionBar!=null){
             actionBar.hide();
         }
+    }
+
+    private void initAdMob(){
+        initBottomBanner();
+        initInterstitial();
+    }
+
+    private void initBottomBanner(){
+        mAdview = findViewById(R.id.adView);
+        mAdview.setVisibility(View.GONE);
+        mAdview.loadAd(getAdRequest());
+
+        initAdListener();
+    }
+
+    private void initInterstitial(){
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.loadAd(getAdRequest());
+
+        interstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed(){
+                super.onAdClosed();
+                interstitialAd.loadAd(getAdRequest());
+            }
+        });
+    }
+
+    private void initAdListener(){
+        mAdview.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                mAdview.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private AdRequest getAdRequest(){
+        return new AdRequest.Builder().addTestDevice("55E27CC73222E3352C7957A2D001E3BF").build();
     }
 
     public void onBackPressed() {
@@ -205,6 +262,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
+    private void startAdMobDialogFrag(){
+        AdMobDialogFrag adMobDialogFrag1 = new  AdMobDialogFrag();
+        adMobDialogFrag1.show(getFragmentManager(),"");
+    }
+
     @Override
     public void onClick(View v) {
         switch(v.getId()){
@@ -215,6 +277,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rd_azm_ng:
                 azmNgRdBtnSelected();
                 clearEdScodeFilter();
+                break;
+            case R.id.iv_info:
+                startAdMobDialogFrag();
                 break;
             default:
                 break;

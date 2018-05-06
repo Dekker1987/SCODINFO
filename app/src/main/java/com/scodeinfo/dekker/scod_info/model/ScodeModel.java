@@ -19,7 +19,7 @@ public class ScodeModel implements ParentObject {
         return scodeNo;
     }
 
-    public void setScodeNo(String scodeNo) {
+    protected void setScodeNo(String scodeNo) {
         this.scodeNo = scodeNo;
     }
 
@@ -27,7 +27,7 @@ public class ScodeModel implements ParentObject {
         return scodeShortDescription;
     }
 
-    public void setScodeShortDescription(String scodeShortDescription) {
+    protected void setScodeShortDescription(String scodeShortDescription) {
         this.scodeShortDescription = scodeShortDescription;
     }
 
@@ -35,7 +35,7 @@ public class ScodeModel implements ParentObject {
         return scodeFullDescription;
     }
 
-    public void setScodeFullDescription(String scodeFullDescription) {
+    protected void setScodeFullDescription(String scodeFullDescription) {
         this.scodeFullDescription = scodeFullDescription;
     }
 

@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -25,4 +26,5 @@ dependencies {
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.bignerdranch.android:expandablerecyclerview:1.0.3'
     implementation 'ch.acra:acra:4.9.2'
+    implementation 'com.google.android.gms:play-services-ads:15.0.1'
 }

@@ -1,7 +1,10 @@
 package com.scodeinfo.dekker.scod_info.viewholders;
 
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 import com.scodeinfo.dekker.scod_info.R;
@@ -10,21 +13,22 @@ import com.scodeinfo.dekker.scod_info.R;
  * Created by Sergii on 28.02.2018.
  */
 
-public class ScodeListParentHolder extends ParentViewHolder{
+public class ScodeListParentHolder extends ParentViewHolder {
 
     public ImageView iv_expand;
     public ImageView iv_share_scode;
     public TextView tv_scode_num;
     public TextView tv_scode_short_descr;
+    public LinearLayout li_lay_scode_item;
 
     public ScodeListParentHolder(View itemView) {
         super(itemView);
         tv_scode_num = itemView.findViewById(R.id.tv_scode_num);
         tv_scode_short_descr = itemView.findViewById(R.id.tv_scode_full_descr);
+        li_lay_scode_item = itemView.findViewById(R.id.li_lay_scode_item);
 
         initShareIco();
         initExpandIco();
-
     }
 
     private void initShareIco(){
@@ -36,4 +40,9 @@ public class ScodeListParentHolder extends ParentViewHolder{
         iv_expand = itemView.findViewById(R.id.iv_expand);
         iv_expand.setImageResource(R.drawable.ic_expand_more_black_24dp);
     }
+
+
+
+
+
 }

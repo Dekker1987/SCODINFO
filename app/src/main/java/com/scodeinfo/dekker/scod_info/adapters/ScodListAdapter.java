@@ -86,7 +86,7 @@ public class ScodListAdapter extends ExpandableRecyclerAdapter<ScodeListParentHo
                 return false;
             }
         });
-    }
+   }
 
     private void makeSCODEtouchCount(){
         int tempSCODEtouchCounter = SharedHelper.getInstance().getSCODEtouchCounter();

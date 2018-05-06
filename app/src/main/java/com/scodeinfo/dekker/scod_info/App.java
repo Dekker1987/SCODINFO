@@ -28,6 +28,6 @@ public class App extends Application {
 
     private void initSharedHelper(){
         SharedHelper.getInstance().init(this);
-        SharedHelper.getInstance().resetCounters();
+       // SharedHelper.getInstance().resetCounters();
     }
 }

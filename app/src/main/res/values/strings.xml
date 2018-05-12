@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">SCOD-INFO</string>
     <string name="err_header">Error</string>
+    <string name="app_includes">This application includes CMD-V4 and AZM-NG error codes.</string>
+    <string name="write_to">For suggestion and remarks write to:</string>
+    <string name="email_for_write"><u>dekker1349@gmail.com</u></string>
 </resources>

@@ -43,11 +43,12 @@ public class SharedHelper {
     public int getSCODEtouchCounter(){
         return prefs.getInt("scode_press_counter",0);
     }
-
+/*
     public void resetCounters(){
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("share_counter",0);
         editor.putInt("scode_press_counter",0);
         editor.apply();
     }
+    */
 }

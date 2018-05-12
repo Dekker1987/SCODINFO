@@ -21,7 +21,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.scodeinfo.dekker.scod_info.adapters.ScodListAdapter;
-import com.scodeinfo.dekker.scod_info.fragments.AdMobDialogFrag;
+import com.scodeinfo.dekker.scod_info.fragments.AboutDialogFrag;
 import com.scodeinfo.dekker.scod_info.model.ScodeModel;
 import com.scodeinfo.dekker.scod_info.model.ScodeModelChild;
 import com.scodeinfo.dekker.scod_info.utils.ContentUtil;
@@ -263,8 +263,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startAdMobDialogFrag(){
-        AdMobDialogFrag adMobDialogFrag1 = new  AdMobDialogFrag();
-        adMobDialogFrag1.show(getFragmentManager(),"");
+        AboutDialogFrag aboutDialogFrag1 = new AboutDialogFrag();
+        aboutDialogFrag1.show(getFragmentManager(),"");
     }
 
     @Override

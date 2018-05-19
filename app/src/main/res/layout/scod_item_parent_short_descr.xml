@@ -78,9 +78,9 @@
                     android:id="@+id/iv_expand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="fitXY"
                     android:layout_centerHorizontal="true"
                     android:padding="8dp"
+                    android:scaleType="fitXY"
                     card_view:srcCompat="@drawable/ic_arrow_drop_down_black_24dp" />
             </RelativeLayout>
         </LinearLayout>

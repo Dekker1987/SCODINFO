@@ -19,7 +19,7 @@ import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.scodeinfo.dekker.scod_info.adapters.ScodListAdapter;
 import com.scodeinfo.dekker.scod_info.fragments.AboutDialogFrag;
 import com.scodeinfo.dekker.scod_info.model.ScodeModel;
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<ScodeModel> scodeParentListAzmNg;
     private List<ParentObject> scodeParentListFilteredAzmNg;
     private AdView mAdview;
-    private InterstitialAd interstitialAd;
+   // private InterstitialAd interstitialAd;
     private boolean isCmdV4Enabled;
 
     @Override
@@ -201,20 +201,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initAdMob(){
         initBottomBanner();
-        initInterstitial();
+       // initInterstitial();
     }
 
     private void initBottomBanner(){
+        MobileAds.initialize(this, "ca-app-pub-5296682693298311~9943437548");
         mAdview = findViewById(R.id.adView);
         mAdview.setVisibility(View.GONE);
         mAdview.loadAd(getAdRequest());
 
         initAdListener();
     }
-
+/*
     private void initInterstitial(){
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); // test AD
         interstitialAd.loadAd(getAdRequest());
 
         interstitialAd.setAdListener(new AdListener(){
@@ -225,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
+*/
     private void initAdListener(){
         mAdview.setAdListener(new AdListener() {
             @Override
@@ -237,7 +238,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private AdRequest getAdRequest(){
-        return new AdRequest.Builder().addTestDevice("55E27CC73222E3352C7957A2D001E3BF").build();
+        return new AdRequest.Builder()
+                .addTestDevice("55E27CC73222E3352C7957A2D001E3BF")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
     }
 
     public void onBackPressed() {

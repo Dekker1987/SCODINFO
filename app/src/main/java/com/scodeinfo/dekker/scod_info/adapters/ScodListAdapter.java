@@ -51,7 +51,10 @@ public class ScodListAdapter extends ExpandableRecyclerAdapter<ScodeListParentHo
     }
 
     private AdRequest getAdRequest(){
-        return new AdRequest.Builder().addTestDevice("55E27CC73222E3352C7957A2D001E3BF").build();
+        return new AdRequest.Builder()
+                .addTestDevice("55E27CC73222E3352C7957A2D001E3BF")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
     }
 
     @Override
@@ -86,7 +89,7 @@ public class ScodListAdapter extends ExpandableRecyclerAdapter<ScodeListParentHo
                 return false;
             }
         });
-   }
+    }
 
     private void makeSCODEtouchCount(){
         int tempSCODEtouchCounter = SharedHelper.getInstance().getSCODEtouchCounter();

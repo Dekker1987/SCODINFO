@@ -1,7 +1,5 @@
 package com.scodeinfo.dekker.scod_info.viewholders;
 
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,9 +38,4 @@ public class ScodeListParentHolder extends ParentViewHolder {
         iv_expand = itemView.findViewById(R.id.iv_expand);
         iv_expand.setImageResource(R.drawable.ic_expand_more_black_24dp);
     }
-
-
-
-
-
 }
